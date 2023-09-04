@@ -81,6 +81,13 @@ const HomeScreen = () => {
 
         {/* {Categories} */}
         <View>
+          {/* {categories.length > 0 && (
+            <Categories
+              categories={categories}
+              activeCategory={activeCategory}
+              setActiveCategory={setActiveCategory}
+            ></Categories>
+          )} */}
           <Categories
             categories={categories}
             activeCategory={activeCategory}

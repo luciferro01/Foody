@@ -4,11 +4,13 @@ import {
   heightPercentageToDP as hp,
   widthPercentageToDP,
 } from "react-native-responsive-screen";
-import { categoryData } from "../constants";
+// import { categoryData } from "../constants";
+
+import Animated, { FadeInDown } from "react-native-reanimated";
 
 const Categories = ({ categories, activeCategory, setActiveCategory }) => {
   return (
-    <View>
+    <Animated.View entering={FadeInDown.duration(500).springify}>
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
@@ -46,7 +48,7 @@ const Categories = ({ categories, activeCategory, setActiveCategory }) => {
 
         {/* categoryData.map((cat, index) =>{}) */}
       </ScrollView>
-    </View>
+    </Animated.View>
   );
 };
 
