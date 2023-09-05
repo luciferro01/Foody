@@ -5,13 +5,16 @@ import { heightPercentageToDP as hp } from "react-native-responsive-screen";
 import axios from "axios";
 import { BellIcon, MagnifyingGlassIcon } from "react-native-heroicons/outline";
 import Categories from "../components/catergories";
+import Recipes from "../components/recipes";
 
 const HomeScreen = () => {
   const [activeCategory, setActiveCategory] = useState("Beef");
   const [categories, setCategories] = useState([]);
+  const [meals, setMeals] = useState({});
 
   useEffect(() => {
     getCategories();
+    getMeals();
   }, []);
 
   const getCategories = async () => {
@@ -25,6 +28,24 @@ const HomeScreen = () => {
       }
     } catch (e) {
       console.log("error:", e);
+    }
+  };
+
+  const getMeals = async (category = "Beef") => {
+    try {
+      const response = await axios.get(
+        // "https://themealdb.com/api/json/v1/1/filter.php?c=${category}"
+        `https://www.themealdb.com/api/json/v1/1/filter.php?c=${category}`
+      );
+      // console.log("got recipes: ", response.data);
+      console.log(response.data.meals[0].idMeal);
+      console.log(response.data.meals[0]);
+      if (response && response.data) {
+        setMeals(response.data.meals);
+      }
+      console.log(meals[0]);
+    } catch (err) {
+      console.log("error: ", err.message);
     }
   };
 
@@ -85,15 +106,21 @@ const HomeScreen = () => {
             <Categories
               categories={categories}
               activeCategory={activeCategory}
-              setActiveCategory={setActiveCategory}
-            ></Categories>
+              handleChangeCategory={handleChangeCategory}
+            />
           )} */}
+
           <Categories
             categories={categories}
             activeCategory={activeCategory}
             setActiveCategory={setActiveCategory}
           ></Categories>
         </View>
+
+        {/* Recipe Section */}
+        {/* <View>
+          <Recipes categories={categories} meals={meals}></Recipes>
+        </View> */}
       </ScrollView>
     </View>
   );

@@ -10,7 +10,9 @@ import Animated, { FadeInDown } from "react-native-reanimated";
 
 const Categories = ({ categories, activeCategory, setActiveCategory }) => {
   return (
-    <Animated.View entering={FadeInDown.duration(500).springify}>
+    <Animated.View
+    //  entering={FadeInDown.duration(500).springify}
+    >
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
