@@ -1,17 +1,20 @@
 import { View, Text, Pressable, Image } from "react-native";
-
-import { heightPercentageToDP as hp } from "react-native-responsive-screen";
 import React from "react";
-// import { mealData } from "../constants/index.js";
-import Animated, { FadeInDown } from "react-native-reanimated";
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from "react-native-responsive-screen";
 import MasonryList from "@react-native-seoul/masonry-list";
-const Recipes = (categories, meals) => {
-  // console.log(meals[0]["idMeal"]);
+import { mealData } from "../constants";
+import Animated, { FadeInDown } from "react-native-reanimated";
+import Loading from "./loading";
+import { CachedImage } from "../helpers/image";
+import { useNavigation } from "@react-navigation/native";
 
-  // console.log(meals[0].idMeal);
-  console.log(meals);
+export default function Recipes({ categories, meals }) {
+  const navigation = useNavigation();
   return (
-    <View className="space-y-3 mx-4">
+    <View className="mx-4 space-y-3">
       <Text
         style={{ fontSize: hp(3) }}
         className="font-semibold text-neutral-600"
@@ -19,7 +22,9 @@ const Recipes = (categories, meals) => {
         Recipes
       </Text>
       <View>
-        {categories.length == 0 && meals.length == 0 ? null : (
+        {categories.length == 0 || meals.length == 0 ? (
+          <Loading size="large" className="mt-20" />
+        ) : (
           <MasonryList
             data={meals}
             keyExtractor={(item) => item.idMeal}
@@ -37,42 +42,50 @@ const Recipes = (categories, meals) => {
       </View>
     </View>
   );
-};
+}
 
-const RecipeCard = (item, index) => {
+const RecipeCard = ({ item, index, navigation }) => {
   let isEven = index % 2 == 0;
   return (
     <Animated.View
-      entering={FadeInDown.delay(200).duration(600).springify().damping(12)}
+      entering={FadeInDown.delay(index * 100)
+        .duration(600)
+        .springify()
+        .damping(12)}
     >
       <Pressable
-        // style={{ width: hp(3.5), height: hp(3) }}
         style={{
           width: "100%",
           paddingLeft: isEven ? 0 : 8,
           paddingRight: isEven ? 8 : 0,
         }}
         className="flex justify-center mb-4 space-y-1"
+        onPress={() => navigation.navigate("RecipeDetail", { ...item })}
       >
-        <Image
-          source={{ uri: item.strMealThumb }}
+        {/* <Image 
+                    source={{uri: item.strMealThumb}}
+                    style={{width: '100%', height: index%3==0? hp(25): hp(35), borderRadius: 35}}
+                    className="bg-black/5"
+                /> */}
+        <CachedImage
+          uri={item.strMealThumb}
           style={{
             width: "100%",
-            height: isEven ? hp(25) : hp(35),
+            height: index % 3 == 0 ? hp(25) : hp(35),
             borderRadius: 35,
           }}
           className="bg-black/5"
+          sharedTransitionTag={item.strMeal}
         />
         <Text
-          className="text-neutral-600 font-semibold"
           style={{ fontSize: hp(1.5) }}
+          className="font-semibold ml-2 text-neutral-600"
         >
-          {/* {item.name.length > 20 ? item.name.slice(0, 20) + "..." : item.name} */}
-          {item.strMeal}
+          {item.strMeal.length > 20
+            ? item.strMeal.slice(0, 20) + "..."
+            : item.strMeal}
         </Text>
       </Pressable>
     </Animated.View>
   );
 };
-
-export default Recipes;
