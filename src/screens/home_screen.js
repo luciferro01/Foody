@@ -121,6 +121,10 @@ const HomeScreen = () => {
         {/* <View>
           <Recipes categories={categories} meals={meals}></Recipes>
         </View> */}
+
+        <View>
+          <Recipes meals={meals} categories={categories} />
+        </View>
       </ScrollView>
     </View>
   );
